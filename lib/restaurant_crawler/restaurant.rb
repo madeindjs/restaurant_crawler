@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'sqlite3'
 
 module RestaurantCrawler
 
@@ -28,7 +29,7 @@ module RestaurantCrawler
 
       # found address
       if p = @doc.at_css("div.addressInfo")
-        @address = sanitize p.text
+        @address = sanitize p.text.split('Cuisine').first
       else
         raise RuntimeError.new "Restaurant's address not found"
       end
@@ -37,6 +38,16 @@ module RestaurantCrawler
 
     def to_s
       "#{@name}: #{@website}"
+    end
+
+
+    def save database
+      database.execute "CREATE TABLE IF NOT EXISTS restaurants(Id INTEGER PRIMARY KEY, name TEXT, website TEXT, address TEXT)"
+      stm = database.prepare "INSERT INTO restaurants(name, website, address) VALUES(:name, :website, :address)"
+      stm.bind_param 'name', @name
+      stm.bind_param 'website', @website
+      stm.bind_param 'address', @address
+      stm.execute 
     end
 
 
