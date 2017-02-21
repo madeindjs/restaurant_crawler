@@ -1,8 +1,14 @@
 # RestaurantCrawler
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/restaurant_crawler`. To experiment with that code, run `bin/console` for an interactive prompt.
+J'ai eu besoin de récupérer les nom, siteweb et addresse mail de restaurants francais pour faire de la prospection:
 
-TODO: Delete this and the text above, and describe your gem
+> Moi: Quoi? 1500 € pour acheter une simple liste de restaurants? 
+
+> Ruby: Bouge pas, je vais t'aider!
+
+Quelques heures plus tard: plus de 800 résultats gratuits juste avec **Nokogiri** et **Anemone**.
+
+Si cela peu servir à quelqu'un, voici les sources ;) .
 
 ## usage
 
