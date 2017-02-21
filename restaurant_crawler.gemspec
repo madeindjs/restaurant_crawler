@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'anemone'
   spec.add_dependency 'nokogiri'
+  spec.add_dependency 'open_uri_redirections'
 
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"

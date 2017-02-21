@@ -12,3 +12,9 @@ desc "start crawler"
 task :crawl do
   RestaurantCrawler.crawl
 end
+
+
+desc "find emails of restaurants crawled"
+task :find_emails do
+  RestaurantCrawler.find_emails
+end
