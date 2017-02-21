@@ -12,14 +12,14 @@ module RestaurantCrawler
       @doc = nokogiri_doc
       # found name
       if h1 = @doc.at_css("h1")
-        @name = h1.text.chomp
+        @name = sanitize h1.text
       else
         raise RuntimeError.new "T"
       end
       # found website
       @doc.css("a").each do |link|
         if link.text.include? "Site du restaurant"
-          @website = link['href'].chomp
+          @website = sanitize link['href']
           break
         end
       end
@@ -28,7 +28,7 @@ module RestaurantCrawler
 
       # found address
       if p = @doc.at_css("div.addressInfo")
-        @address = p.text.chomp
+        @address = sanitize p.text
       else
         raise RuntimeError.new "Restaurant's address not found"
       end
@@ -37,6 +37,16 @@ module RestaurantCrawler
 
     def to_s
       "#{@name}: #{@website}"
+    end
+
+
+    private
+
+    def sanitize string
+      string.gsub!("\n", '')
+      string.gsub!("\r", '')
+      string.gsub!("  ", '')
+      return string
     end
 
     
