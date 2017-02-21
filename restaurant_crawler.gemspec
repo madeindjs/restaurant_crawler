@@ -6,12 +6,12 @@ require 'restaurant_crawler/version'
 Gem::Specification.new do |spec|
   spec.name          = "restaurant_crawler"
   spec.version       = RestaurantCrawler::VERSION
-  spec.authors       = ["Alex Rousseau"]
-  spec.email         = ["arousseau@gac-technology.com"]
+  spec.authors       = ["Alexandre Rousseau"]
+  spec.email         = ["madeindjs@gmail.com"]
 
   spec.summary       = %q{Find restaurants websites on http://www.restopolitan.com.}
   spec.description   = %q{A simply web crawler.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/madeindjs/restaurant_crawler"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -26,8 +26,8 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir        = "bin"
+  spec.executables   = ['restaurant_crawler.rb']
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'anemone'

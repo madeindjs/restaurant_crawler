@@ -4,7 +4,9 @@ Welcome to your new gem! In this directory, you'll find the files you need to be
 
 TODO: Delete this and the text above, and describe your gem
 
-## Installation
+## usage
+
+### From instalation
 
 Add this line to your application's Gemfile:
 
@@ -20,9 +22,22 @@ Or install it yourself as:
 
     $ gem install restaurant_crawler
 
-## Usage
+and then you'll be able to run from console
 
-TODO: Write usage instructions here
+    $ restaurant_crawler.rb --h
+    Usage: restaurant_crawler [options]
+        -c, --crawl                      Start to crawl restopolitan.com
+        -e, --email                      Start to fetch email from database (need to run crawl before)
+
+
+### From source 
+
+    $ git clone https://github.com/madeindjs/restaurant_crawler.git
+    $ cd restaurant_crawler
+    $ bundle install
+    $ rake -T 
+    rake crawl            # start crawler
+    rake find_emails      # find emails of restaurants crawled
 
 ## Development
 
