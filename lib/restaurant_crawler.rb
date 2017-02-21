@@ -1,4 +1,5 @@
 require "restaurant_crawler/version"
+require "restaurant_crawler/restaurant"
 require 'anemone'
 
 module RestaurantCrawler
@@ -8,7 +9,12 @@ module RestaurantCrawler
   def self.crawl
     Anemone.crawl(RESTOPOLITAN_URL) do |anemone|
       anemone.on_pages_like(/.*\/restaurant\/.*/) do |page|
-          puts page.url
+        begin
+          restaurant = Restaurant.new page.doc
+          puts "[x] " + restaurant.to_s
+        rescue RuntimeError => e
+          puts "[ ] #{e} : #{page.url} craweld"
+        end
       end
     end
   end
