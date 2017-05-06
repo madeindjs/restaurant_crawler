@@ -32,7 +32,7 @@ and then you'll be able to run from console
 
     $ restaurant_crawler.rb --h
     Usage: restaurant_crawler [options]
-        -c, --crawl                      Start to crawl restopolitan.com
+        -c, --crawl_restopolitan         Start to crawl restopolitan.com
         -e, --email                      Start to fetch email from database (need to run crawl before)
 
 
@@ -42,8 +42,8 @@ and then you'll be able to run from console
     $ cd restaurant_crawler
     $ bundle install
     $ rake -T 
-    rake crawl            # start crawler
-    rake find_emails      # find emails of restaurants crawled
+    rake crawl_restopolitan  # start crawler on restopolitan.com
+    rake find_emails         # find emails of restaurants crawled
 
 ## Development
 

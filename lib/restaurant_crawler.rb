@@ -9,12 +9,12 @@ module RestaurantCrawler
 
   RESTOPOLITAN_URL = 'http://www.restopolitan.com'
 
-  def self.crawl
+  def self.crawl_restopolitan
     database = SQLite3::Database.new "restaurants.sqlite3"
     Anemone.crawl(RESTOPOLITAN_URL, delay: 0.5) do |anemone|
       anemone.on_pages_like(/.*\/restaurant\/.*/) do |page|
         begin
-          restaurant = Restaurant.new page.doc
+          restaurant = RestaurantRestopolitan.new page.doc
           if restaurant.save database
             puts "[x] " + restaurant.to_s + " saved"
           else
@@ -25,6 +25,11 @@ module RestaurantCrawler
         end
       end
     end
+  end
+
+
+  def self.crawl_pagesjaunes
+    # to do
   end
 
   def self.find_emails

@@ -9,8 +9,8 @@ task :default => :spec
 
 
 desc "start crawler"
-task :crawl do
-  RestaurantCrawler.crawl
+task :crawl_restopolitan do
+  RestaurantCrawler.crawl_restopolitan
 end
 
 
