@@ -1,5 +1,7 @@
 require 'nokogiri'
 
+require 'restaurant'
+
 module RestaurantCrawler
 
   class RestaurantRestopolitan < Restaurant

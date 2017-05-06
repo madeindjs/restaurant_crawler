@@ -5,6 +5,9 @@ require 'anemone'
 require 'nokogiri'
 require 'open_uri_redirections'
 
+require 'restaurant_crawler/restaurant_restopolitan'
+require 'restaurant_crawler/restaurant_pagesjaunes'
+
 module RestaurantCrawler
 
   RESTOPOLITAN_URL = 'http://www.restopolitan.com'
