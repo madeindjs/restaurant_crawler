@@ -7,7 +7,6 @@ module RestaurantCrawler
 
   class RestaurantPagesjaunes < Restaurant
 
-    URL = "https://www.pagesjaunes.fr/annuaire/chercherlespros?quoiqui=restaurants&ou=RHONE+%2869%29&idOu=D069&proximite=0&quoiQuiInterprete=restaurants"
 
     def initialize 
       raise RuntimeError.new "Not implemented error"
@@ -21,16 +20,30 @@ module RestaurantCrawler
     		where: 'Rhone',
     		UID: '127.0.0.1',
     		apikey: '29be7dv3qj9gvdyawn5ns8jt',
-    		pgLen: 140,
+    		pgLen: 10,
     		fmt: 'json',
     		lang: 'fr',
 			}
 
 			url = 'http://api.sandbox.yellowapi.com/FindBusiness/?' + URI.encode_www_form(params)
 
-			puts JSON.load(open(url))
+			data = JSON.load(open(url))
+
+
+			data['listings'].each do |restaurant_data|
+				puts restaurant_data.inspect
+			end
+
+			exit!
+
+			puts pages_count = data['summary']['pageCount'].to_i
+
+			(2..pages_count).each do |page_number|
+			end
 
     end
+
+
 
   end
 
