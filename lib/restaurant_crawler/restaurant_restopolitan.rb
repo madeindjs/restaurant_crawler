@@ -1,10 +1,10 @@
 require 'nokogiri'
 
-require 'restaurant'
-
 module RestaurantCrawler
 
   class RestaurantRestopolitan < Restaurant
+
+    URL = 'http://www.restopolitan.com'
 
     def initialize nokogiri_doc
       @doc = nokogiri_doc

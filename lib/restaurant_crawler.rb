@@ -3,6 +3,7 @@ require "restaurant_crawler/restaurant"
 require 'sqlite3'
 require 'anemone'
 require 'nokogiri'
+require 'open-uri'
 require 'open_uri_redirections'
 
 require 'restaurant_crawler/restaurant_restopolitan'
@@ -10,11 +11,11 @@ require 'restaurant_crawler/restaurant_pagesjaunes'
 
 module RestaurantCrawler
 
-  RESTOPOLITAN_URL = 'http://www.restopolitan.com'
+  
 
   def self.crawl_restopolitan
     database = SQLite3::Database.new "restaurants.sqlite3"
-    Anemone.crawl(RESTOPOLITAN_URL, delay: 0.5) do |anemone|
+    Anemone.crawl(RestaurantRestopolitan::URL, delay: 0.5) do |anemone|
       anemone.on_pages_like(/.*\/restaurant\/.*/) do |page|
         begin
           restaurant = RestaurantRestopolitan.new page.doc
@@ -32,7 +33,11 @@ module RestaurantCrawler
 
 
   def self.crawl_pagesjaunes
-    # to do
+    (1..2).each do |page_number|
+      # url = RestaurantPagesjaunes.build_url page_number
+      # puts url
+      RestaurantPagesjaunes.restaurants
+    end
   end
 
   def self.find_emails

@@ -8,9 +8,14 @@ RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 
 
-desc "start crawler"
+desc "start crawler on restopolitan.com"
 task :crawl_restopolitan do
   RestaurantCrawler.crawl_restopolitan
+end
+
+desc "start crawler on pages-jaunes.fr"
+task :crawl_pagesjaunes do
+  RestaurantCrawler.crawl_pagesjaunes
 end
 
 
