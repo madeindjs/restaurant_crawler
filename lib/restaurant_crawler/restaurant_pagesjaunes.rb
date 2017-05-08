@@ -24,7 +24,7 @@ module RestaurantCrawler
     #  }
     def initialize yellow_data
       @name = yellow_data['name']
-      @website = yellow_data['content']['Url']['inMkt'] if yellow_data['content']['Url']['avail']
+      @website = yellow_data['content']['Url']['inMkt'].to_s if yellow_data['content']['Url']['avail']
       raise RuntimeError.new "Restaurant's website not found" unless @website
 
       # build address to something like `1450, av Victoria, J4V 1M2, Greenfield Park, ` 
@@ -35,36 +35,38 @@ module RestaurantCrawler
 
 
     def self.restaurants
+      # build URL
       params = {
         what:   'restaurants',
         where:  'Rhone',
         UID:    '127.0.0.1',
         apikey: '29be7dv3qj9gvdyawn5ns8jt',
-        pgLen:  10,
+        pgLen:  140,
         fmt:    'json',
         lang:   'fr',
       }
-
       url = 'http://api.sandbox.yellowapi.com/FindBusiness/?' + URI.encode_www_form(params)
 
-
+      # get data from API
       data = JSON.load(open(url))
+      pages_count = data['summary']['pageCount'].to_i
 
-
+      # get restaurants from 1st query
       data['listings'].each do |restaurant_data|
         yield RestaurantPagesjaunes.new restaurant_data rescue RuntimeError
       end
 
-      exit!
-
-      puts pages_count = data['summary']['pageCount'].to_i
-
+      # now query others pages
       (2..pages_count).each do |page_number|
+        params['pg'] = page_number
+        url = 'http://api.sandbox.yellowapi.com/FindBusiness/?' + URI.encode_www_form(params)
+        puts url
+        JSON.load(open(url))['listings'].each do |restaurant_data|
+          yield RestaurantPagesjaunes.new restaurant_data rescue RuntimeError
+        end
       end
 
     end
-
-
 
   end
 

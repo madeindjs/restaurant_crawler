@@ -21,6 +21,7 @@ module RestaurantCrawler
       stm.bind_param 'website', @website
       stm.bind_param 'address', @address
       stm.execute 
+      return true
     end
 
 

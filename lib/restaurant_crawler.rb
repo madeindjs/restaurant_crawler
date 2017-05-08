@@ -11,15 +11,16 @@ require 'restaurant_crawler/restaurant_pagesjaunes'
 
 module RestaurantCrawler
 
+  @database = SQLite3::Database.new "restaurants.sqlite3"
+
   
 
   def self.crawl_restopolitan
-    database = SQLite3::Database.new "restaurants.sqlite3"
     Anemone.crawl(RestaurantRestopolitan::URL, delay: 0.5) do |anemone|
       anemone.on_pages_like(/.*\/restaurant\/.*/) do |page|
         begin
           restaurant = RestaurantRestopolitan.new page.doc
-          if restaurant.save database
+          if restaurant.save @database
             puts "[x] " + restaurant.to_s + " saved"
           else
             puts "[ ] failed to save " + restaurant.to_s
@@ -34,7 +35,11 @@ module RestaurantCrawler
 
   def self.crawl_pagesjaunes
     RestaurantPagesjaunes.restaurants do |restaurant|
-      puts restaurant.inspect
+      if restaurant.save @database
+        puts "[x] " + restaurant.to_s + " saved"
+      else
+        puts "[ ] failed to save " + restaurant.to_s
+      end
     end
   end
 
