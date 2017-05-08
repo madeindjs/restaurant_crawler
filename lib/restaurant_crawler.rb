@@ -12,6 +12,7 @@ require 'restaurant_crawler/restaurant_pagesjaunes'
 module RestaurantCrawler
 
   @database = SQLite3::Database.new "restaurants.sqlite3"
+  @database.results_as_hash = true
 
   
 
@@ -44,22 +45,21 @@ module RestaurantCrawler
   end
 
   def self.fetch_pagesjaunes_data
+    # get only restaurants from yellow API and with website empty
+    @database.execute("SELECT * FROM restaurants WHERE yellow_id IS NOT NULL AND website = '?'").each do |row|
+      puts Restaurant.from_sql_hash(row).inspect
+    end
   end
 
   def self.find_emails
-    database = SQLite3::Database.new "restaurants.sqlite3"
-
     # add columns if needed
     ['email', 'telephone', 'error'].each do |column|
-      database.execute "ALTER TABLE restaurants ADD COLUMN #{column} TEXT" rescue SQLite3::SQLException
+      @database.execute "ALTER TABLE restaurants ADD COLUMN #{column} TEXT" rescue SQLite3::SQLException
     end
 
 
-    database.execute("SELECT * FROM restaurants").each do |row|
-      id      = row[0]
-      name    = row[1]
-      website = row[2]
-      email   = telephone = nil
+    @database.execute("SELECT * FROM restaurants").each do |row|
+      Restaurant.from_sql_hash id = row
 
       begin
         doc = Nokogiri::HTML(open website)
@@ -71,7 +71,7 @@ module RestaurantCrawler
         end
 
         if email || telephone
-          stm = database.prepare "UPDATE restaurants SET email = :email, telephone = :telephone WHERE id = :id"
+          stm = @database.prepare "UPDATE restaurants SET email = :email, telephone = :telephone WHERE id = :id"
           stm.bind_param 'id', id
           stm.bind_param 'email', email
           stm.bind_param 'telephone', telephone
@@ -81,7 +81,7 @@ module RestaurantCrawler
           raise RuntimeError.new "Restaurant's email / telephone not found"
         end
       rescue Exception => e
-        stm = database.prepare "UPDATE restaurants SET error = :error WHERE id = :id"
+        stm = @database.prepare "UPDATE restaurants SET error = :error WHERE id = :id"
         stm.bind_param 'id', id
         stm.bind_param 'error', e.message
         stm.execute 

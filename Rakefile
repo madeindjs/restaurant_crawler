@@ -20,7 +20,7 @@ end
 
 desc "Fetch all restaurants informations from pagesjaunes.fr"
 task :crawl_pagesjaunes_data do
-  RestaurantCrawler.crawl_pagesjaunes_data
+  RestaurantCrawler.fetch_pagesjaunes_data
 end
 
 

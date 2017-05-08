@@ -4,7 +4,17 @@ module RestaurantCrawler
 
 
   class Restaurant
-    attr_reader :id, :name, :website, :address
+    attr_accessor :id, :name, :website, :address, :email, :yellow_id
+
+    def self.from_sql_hash sql_data
+      restaurant = Restaurant.new
+      restaurant.id        = sql_data['id']
+      restaurant.name      = sql_data['name']
+      restaurant.website   = sql_data['website']
+      restaurant.email     = sql_data['email'] if sql_data.has_key? 'email'
+      restaurant.telephone = sql_data['telephone'] if sql_data.has_key? 'telephone'
+      return restaurant
+    end
 
 
     def to_s
@@ -38,13 +48,7 @@ module RestaurantCrawler
       string.gsub!("  ", '')
       return string
     end
-
-
-    def fetch_restopolitan
-    end
-
     
   end
-
 
 end
