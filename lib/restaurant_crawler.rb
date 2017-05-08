@@ -33,10 +33,8 @@ module RestaurantCrawler
 
 
   def self.crawl_pagesjaunes
-    (1..2).each do |page_number|
-      # url = RestaurantPagesjaunes.build_url page_number
-      # puts url
-      RestaurantPagesjaunes.restaurants
+    RestaurantPagesjaunes.restaurants do |restaurant|
+      puts restaurant.inspect
     end
   end
 
