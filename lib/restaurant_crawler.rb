@@ -33,7 +33,7 @@ module RestaurantCrawler
   end
 
 
-  def self.crawl_pagesjaunes
+  def self.crawl_pagesjaunes_restaurants
     RestaurantPagesjaunes.restaurants do |restaurant|
       if restaurant.save @database
         puts "[x] " + restaurant.to_s + " saved"
@@ -43,23 +43,23 @@ module RestaurantCrawler
     end
   end
 
+  def self.fetch_pagesjaunes_data
+  end
+
   def self.find_emails
     database = SQLite3::Database.new "restaurants.sqlite3"
 
     # add columns if needed
     ['email', 'telephone', 'error'].each do |column|
-      begin
-        database.execute "ALTER TABLE restaurants ADD COLUMN #{column} TEXT"
-      rescue SQLite3::SQLException
-      end
+      database.execute "ALTER TABLE restaurants ADD COLUMN #{column} TEXT" rescue SQLite3::SQLException
     end
 
 
     database.execute("SELECT * FROM restaurants").each do |row|
-      id = row[0]
-      name = row[1]
+      id      = row[0]
+      name    = row[1]
       website = row[2]
-      email = telephone = nil
+      email   = telephone = nil
 
       begin
         doc = Nokogiri::HTML(open website)

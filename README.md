@@ -30,10 +30,13 @@ Or install it yourself as:
 
 and then you'll be able to run from console
 
-    $ restaurant_crawler.rb --h
+    $ restaurant_crawler.rb -h
     Usage: restaurant_crawler [options]
-        -c, --crawl_restopolitan         Start to crawl restopolitan.com
-        -e, --email                      Start to fetch email from database (need to run crawl before)
+        -a, --crawl_restopolitan         Start to crawl restopolitan.com
+        -b                               Crawl basics restaurants data from pagesjaunes.fr
+            --crawl_pagesjaunes_restaurants
+        -c, --crawl_pagesjaunes_data     Fetch all restaurants informations from pagesjaunes.fr
+        -Z, --email                      Start to fetch email from websites founded (need to run crawl before)
 
 
 ### From source 
@@ -41,9 +44,12 @@ and then you'll be able to run from console
     $ git clone https://github.com/madeindjs/restaurant_crawler.git
     $ cd restaurant_crawler
     $ bundle install
-    $ rake -T 
-    rake crawl_restopolitan  # start crawler on restopolitan.com
-    rake find_emails         # find emails of restaurants crawled
+    $ rake -T
+    rake crawl_pagesjaunes_data         # Fetch all restaurants informations from pagesjaunes.fr
+    rake crawl_pagesjaunes_restaurants  # Crawl basics restaurants data from pagesjaunes.fr
+    rake crawl_restopolitan             # start crawler on restopolitan.com
+    rake find_emails                    # find emails of restaurants crawled
+
 
 ## Development
 

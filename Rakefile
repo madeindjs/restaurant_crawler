@@ -13,9 +13,14 @@ task :crawl_restopolitan do
   RestaurantCrawler.crawl_restopolitan
 end
 
-desc "start crawler on pages-jaunes.fr"
-task :crawl_pagesjaunes do
-  RestaurantCrawler.crawl_pagesjaunes
+desc "Crawl basics restaurants data from pagesjaunes.fr"
+task :crawl_pagesjaunes_restaurants do
+  RestaurantCrawler.crawl_pagesjaunes_restaurants
+end
+
+desc "Fetch all restaurants informations from pagesjaunes.fr"
+task :crawl_pagesjaunes_data do
+  RestaurantCrawler.crawl_pagesjaunes_data
 end
 
 

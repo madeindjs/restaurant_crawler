@@ -6,7 +6,7 @@ require 'open-uri'
 module RestaurantCrawler
 
   class RestaurantPagesjaunes < Restaurant
-
+    attr_reader :yellow_id
 
     # @param yellow_data = {
     #   "id"=>"285103", "name"=>"Canada Drive-In Restaurants Regd", 
@@ -23,14 +23,12 @@ module RestaurantCrawler
     #   }
     #  }
     def initialize yellow_data
-      @name = yellow_data['name']
-      @website = yellow_data['content']['Url']['inMkt'].to_s if yellow_data['content']['Url']['avail']
-      raise RuntimeError.new "Restaurant's website not found" unless @website
-
+      @yellow_id = yellow_data['id']
+      @name      = yellow_data['name']
+      @website   = '?' if yellow_data['content']['Url']['avail']
       # build address to something like `1450, av Victoria, J4V 1M2, Greenfield Park, ` 
-      if address_data = yellow_data['address']
-        @address = [ address_data['street'], address_data['pcode'], address_data['city'] ].join ', '
-      end
+      address    = yellow_data['address']
+      @address   = [ address['street'], address['pcode'], address['city'] ].join(', ')
     end
 
 
@@ -60,10 +58,10 @@ module RestaurantCrawler
       (2..pages_count).each do |page_number|
         params['pg'] = page_number
         url = 'http://api.sandbox.yellowapi.com/FindBusiness/?' + URI.encode_www_form(params)
-        puts url
         JSON.load(open(url))['listings'].each do |restaurant_data|
           yield RestaurantPagesjaunes.new restaurant_data rescue RuntimeError
         end
+        sleep 2 # to not exceed maximum request per seconds allowed  
       end
 
     end

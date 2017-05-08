@@ -3,6 +3,7 @@ require 'nokogiri'
 module RestaurantCrawler
 
   class RestaurantRestopolitan < Restaurant
+    attr_reader :doc
 
     URL = 'http://www.restopolitan.com'
 

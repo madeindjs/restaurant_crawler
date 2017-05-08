@@ -31,9 +31,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
 
-  spec.add_runtime_dependency 'anemone', '~> 0'
-  spec.add_runtime_dependency 'nokogiri', '~> 0'
-  spec.add_runtime_dependency 'open_uri_redirections', '~> 0'
+  spec.add_runtime_dependency 'sqlite3', '~> 1.3'
+  spec.add_runtime_dependency 'anemone', '~> 0.7'
+  spec.add_runtime_dependency 'nokogiri', '~> 1.7'
+  spec.add_runtime_dependency 'open_uri_redirections', '~> 0.2'
 
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"
