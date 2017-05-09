@@ -30,6 +30,7 @@ module RestaurantCrawler
       # build address to something like `1450, av Victoria, J4V 1M2, Greenfield Park, ` 
       address              = yellow_data['address']
       restaurant.address   = [ address['street'], address['pcode'], address['city'] ].join(', ')
+      restaurant.yellow_province = address['street']['prov']
       return restaurant
     end
 
@@ -53,7 +54,7 @@ module RestaurantCrawler
 
       # get restaurants from 1st query
       data['listings'].each do |restaurant_data|
-        yield RestaurantPagesjaunes.new restaurant_data rescue RuntimeError
+        yield RestaurantPagesjaunes.from_yellow_data restaurant_data 
       end
 
       # now query others pages
@@ -61,7 +62,7 @@ module RestaurantCrawler
         params['pg'] = page_number
         url = 'http://api.sandbox.yellowapi.com/FindBusiness/?' + URI.encode_www_form(params)
         JSON.load(open(url))['listings'].each do |restaurant_data|
-          yield RestaurantPagesjaunes.new restaurant_data rescue RuntimeError
+          yield RestaurantPagesjaunes.from_yellow_data restaurant_data
         end
         sleep 2 # to not exceed maximum request per seconds allowed  
       end
@@ -75,18 +76,17 @@ module RestaurantCrawler
         UID:       '127.0.0.1',
         apikey:    '29be7dv3qj9gvdyawn5ns8jt',
         listingId: @yellow_id,
-        prov:      'Canada',
+        prov:      @prov,
         'bus-name' => @name,
         fmt:    'json',
         lang:   'fr',
       }
-
       url = 'http://api.sandbox.yellowapi.com/GetBusinessDetails/?' + URI.encode_www_form(params)
       puts url
 
       data = JSON.load(open(url))
-      @telephone = data['phones'].first if data['phones']
-      @website   = data['products']['webUrl'] if data['products'] and data['products']['webUrl'] 
+      @telephone = data['phones'].first['displayNum'] if data['phones']
+      @website   = data['products']['webUrl'].first if data['products'] and data['products']['webUrl'] 
     end
 
   end
