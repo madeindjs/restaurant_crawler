@@ -22,13 +22,15 @@ module RestaurantCrawler
     #     "Url"=>{"avail"=>false, "inMkt"=>false}
     #   }
     #  }
-    def initialize yellow_data
-      @yellow_id = yellow_data['id']
-      @name      = yellow_data['name']
-      @website   = '?' if yellow_data['content']['Url']['avail']
+    def self.from_yellow_data yellow_data
+      restaurant = RestaurantPagesjaunes.new
+      restaurant.yellow_id = yellow_data['id']
+      restaurant.name      = yellow_data['name']
+      restaurant.website   = '?' if yellow_data['content']['Url']['avail']
       # build address to something like `1450, av Victoria, J4V 1M2, Greenfield Park, ` 
-      address    = yellow_data['address']
-      @address   = [ address['street'], address['pcode'], address['city'] ].join(', ')
+      address              = yellow_data['address']
+      restaurant.address   = [ address['street'], address['pcode'], address['city'] ].join(', ')
+      return restaurant
     end
 
 
@@ -64,6 +66,27 @@ module RestaurantCrawler
         sleep 2 # to not exceed maximum request per seconds allowed  
       end
 
+    end
+
+
+    def fetch_yellow_informations
+      throw RuntimeError.new 'yellow_id is empty' unless @yellow_id
+      params = {
+        UID:       '127.0.0.1',
+        apikey:    '29be7dv3qj9gvdyawn5ns8jt',
+        listingId: @yellow_id,
+        prov:      'Canada',
+        'bus-name' => @name,
+        fmt:    'json',
+        lang:   'fr',
+      }
+
+      url = 'http://api.sandbox.yellowapi.com/GetBusinessDetails/?' + URI.encode_www_form(params)
+      puts url
+
+      data = JSON.load(open(url))
+      @telephone = data['phones'].first if data['phones']
+      @website   = data['products']['webUrl'] if data['products'] and data['products']['webUrl'] 
     end
 
   end

@@ -20,7 +20,7 @@ module RestaurantCrawler
     Anemone.crawl(RestaurantRestopolitan::URL, delay: 0.5) do |anemone|
       anemone.on_pages_like(/.*\/restaurant\/.*/) do |page|
         begin
-          restaurant = RestaurantRestopolitan.new page.doc
+          restaurant = RestaurantRestopolitan.from_nokogiri_doc page.doc
           if restaurant.save @database
             puts "[x] " + restaurant.to_s + " saved"
           else
@@ -47,7 +47,14 @@ module RestaurantCrawler
   def self.fetch_pagesjaunes_data
     # get only restaurants from yellow API and with website empty
     @database.execute("SELECT * FROM restaurants WHERE yellow_id IS NOT NULL AND website = '?'").each do |row|
-      puts Restaurant.from_sql_hash(row).inspect
+      restaurant = RestaurantPagesjaunes.from_sql_hash(row)
+      restaurant.fetch_yellow_informations
+      if restaurant.save @database
+        puts "[x] found information about " + restaurant.to_s
+      else
+        puts "[ ] not found information about " + restaurant.to_s
+      end
+      sleep 2
     end
   end
 
