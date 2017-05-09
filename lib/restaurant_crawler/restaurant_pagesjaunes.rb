@@ -8,6 +8,8 @@ module RestaurantCrawler
   class RestaurantPagesjaunes < Restaurant
     attr_reader :yellow_id
 
+    API_KEY = 'dhwbqeefj7n8swu2d5gea74j'
+
     # @param yellow_data = {
     #   "id"=>"285103", "name"=>"Canada Drive-In Restaurants Regd", 
     #   "address"=>{"street"=>"1450, av Victoria", "city"=>"Greenfield Park", "prov"=>"QC", "pcode"=>"J4V 1M2"}, 
@@ -35,13 +37,13 @@ module RestaurantCrawler
     end
 
 
-    def self.restaurants
+    def self.restaurants where = 'Rhone'
       # build URL
       params = {
         what:   'restaurants',
-        where:  'Rhone',
+        where:  where,
         UID:    '127.0.0.1',
-        apikey: '29be7dv3qj9gvdyawn5ns8jt',
+        apikey: API_KEY,
         pgLen:  140,
         fmt:    'json',
         lang:   'fr',
@@ -49,7 +51,12 @@ module RestaurantCrawler
       url = 'http://api.sandbox.yellowapi.com/FindBusiness/?' + URI.encode_www_form(params)
 
       # get data from API
-      data = JSON.load(open(url))
+      begin
+        data = JSON.load(open(url)) 
+      rescue OpenURI::HTTPError
+        puts "maximum requests limit reached"
+        exit!
+      end
       pages_count = data['summary']['pageCount'].to_i
 
       # get restaurants from 1st query
@@ -74,7 +81,7 @@ module RestaurantCrawler
       throw RuntimeError.new 'yellow_id is empty' unless @yellow_id
       params = {
         UID:       '127.0.0.1',
-        apikey:    '29be7dv3qj9gvdyawn5ns8jt',
+        apikey:    API_KEY,
         listingId: @yellow_id,
         prov:      @prov,
         'bus-name' => @name,
