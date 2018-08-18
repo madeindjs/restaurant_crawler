@@ -1,5 +1,7 @@
 # RestaurantCrawler
 
+[![Gem Version](https://badge.fury.io/rb/restaurant_crawler.svg)](https://rubygems.org/gems/restaurant_crawler)
+
 J'ai eu besoin de récupérer les nom, siteweb et addresse mail de restaurants francais pour faire de la prospection:
 
 > Moi: Quoi? 1500 € pour acheter une simple liste de restaurants? 
